@@ -1,0 +1,11 @@
+{
+    "name": "les4fantastiques/hackathon",
+    "description": "Our superHeroes Fight Hackathon",
+    "type": "project",
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "squizlabs/php_codesniffer": "^3.2"
+    },
+    "license": "GNU",
+    "minimum-stability": "stable"
+}
