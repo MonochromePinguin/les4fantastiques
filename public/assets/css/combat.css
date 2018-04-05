@@ -1,0 +1,23 @@
+
+@media ( min-aspect-ratio: 1/1 ) {
+    :root { --dim: 80vh;
+            --margin: 10vh;
+    }
+}
+
+@media ( max-aspect-ratio: 1/1 ) {
+    :root {
+        --dim: 80vh;
+        --margin: 10vh;
+    }
+}
+
+
+html {
+    margin: 0;
+    padding: 0;
+
+    text-align: center;
+    background-color: darkgray;
+}
+
