@@ -1,52 +1,101 @@
 <?php
-    namespace labyrace;
 
-    require_once '../src/gameConstants.php';
-    require_once '../src/functions.php';
+require_once '../vendor/autoload.php';
+require_once '../src/gameConstants.php';
+require_once '../src/functions.php';
 
-    $errorFlag = false;
+//TODO : make autoloading work with this
+require_once '../src/heroClient.php';
+// use heroClient;
 
-    # this page is NOT meant to be used with GET
-    if ( 0 != count( $_GET ) )
+session_start();
+
+$errorFlag = false;
+
+# this page is NOT meant to be used with GET
+if ( 0 != count( $_GET ) )
+{
+    $errorFlag = true;
+    $errBlock = formatErrorMsg( 'Désolé, cette page est prévue pour être utilisée avec la méthode POST.');
+
+} else {
+
+    $requiredPlayers = [ 'player1Id', 'player2Id' ];
+
+    if ( empty($_SESSION['player1Id'])
+         || empty($_SESSION['player2Id'])
+         || empty($_SESSION['level'])
+       )
     {
-        $errorFlag = true;
-        $errMsg = formatErrorMsg( 'Désolé, cette page est prévue pour être utilisée avec la méthode POST.');
-
-    } else {
-
         # ** simple verification : players **
-        $required = [ 'player1', 'player2' ];
-
-        foreach ( $required as $r ) {
+        foreach ( $requiredPlayers as $r ) {
             if ( empty( $_POST[$r] ) )
             {
                 $errorFlag = true;
                 break;
             }
+        }
 
-            #each player must contain enough informations
-            foreach ( $requiredFields as $f ) {
-                if ( empty( $_POST[$required][$f] ) )
-                {
-                    $errorFlag = true;
-                    break;
-                }
+        if ( ! $errorFlag )
+        {
+            $api = new heroClient();
+
+            $playersId[0] = $_POST['player1Id'];
+            $playerId[1] = $_POST['player2Id'];
+
+            #position the players at random corners
+            $possiblePositions = [
+                [0, 0],
+                [0, PLAYGROUNDDIM],
+                [PLAYGROUNDDIM, PLAYGROUNDDIM],
+                [PLAYGROUNDDIM, 0]
+            ];
+            $availablePositions = [ true, true, true, true ];
+            $pPos = count( $possiblePositions );
+
+            #store characters's characteristics into a session variable
+            foreach ($playerId as $p)
+            {
+                $resp = $api->get('id/' . $p . '.json');
+
+                $players[$p] = [
+                    'name' => $resp->name,
+                    'life' => MAXLIFE,
+                    'strength' => $resp->powerstats->strength,
+                    'durability' => $resp->powerstats->durability,
+                    'images' =>  $resp->images
+                ];
+                $resp = null;
+
+                #settle the player in a random corner
+                do {
+                    $n = rand(0, $pPos-1);
+                } while ( $availablePositions[$n] = false );
+
+                $players[$p]['pos'] = $possiblePositions[$n];
             }
+
+            $_SESSION['players'] = $players;
+
+
+            #once we have players, we generate the level
+            if ( empty( $_SESSION['level'] ) )
+                $_SESSION['level'] = generateLevel(PLAYGROUNDDIM);
 
         }
 
-        # if we don't have a level set, create it now
-        if ( empty( $_POST['level'] ) )
-            $level = generateLevel(PLAYGROUNDDIM);
-        else
-            $level = $_POST['level'];
-        $playground = generatePlayground( $level );
-
-
-        if ( $errorFlag )
-            $errMsg = formatErrorMsg( 'Désolé ! Requête mal formée !');
     }
+var_dump($_SESSION['players']);
 
+    # regenerate the playground each time needed
+    if ( ! $errorFlag )
+    {
+        if ( empty( $_SESSION['playground'] ) )
+            $playground = generatePlayground( $_SESSION['level'] );
+    } else
+        $errBlock = formatErrorMsg( 'Désolé ! Requête mal formée !');
+
+}
 
 ?>
 <!DOCTYPE html>
@@ -84,6 +133,14 @@
     </header>
 
     <main>
+
+<?php
+    if ( $errorFlag )
+        # error Messages to be shown ? don't show the normal part
+        echo $errBlock;
+    else {
+?>
+
         <section class="container-fluid">
             <?= $playground ?>
         </section>
@@ -141,7 +198,9 @@
                 </fieldset>
             <form>
         </section>
-
+<?php
+    }
+?>
     </main>
 
   </body>

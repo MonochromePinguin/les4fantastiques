@@ -1,5 +1,4 @@
 <?php
-namespace labyrace;
 
 require_once 'gameConstants.php';
 
@@ -42,7 +41,7 @@ function generatePlayground( array $level ) : string {
         $result .= "<div class=\"row\">\n<div class=\"col-1\"></div>\n";
 
         foreach( $row as $cell ) {
-            $result .= '<div class="col-1">' . $cell . "</div>\n";
+            $result .= '<div class="col-1 cell">' . $cell . "</div>\n";
         }
 
         $result .= "<div class=\"col-1\"></div>\n</div>    <!-- .row -->\n";

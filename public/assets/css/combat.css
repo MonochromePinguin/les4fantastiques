@@ -1,23 +1,57 @@
 
 @media ( min-aspect-ratio: 1/1 ) {
-    :root { --dim: 80vh;
+    :root { --dim: calc( 80vh /12 );
             --margin: 10vh;
     }
 }
 
 @media ( max-aspect-ratio: 1/1 ) {
     :root {
-        --dim: 80vh;
+        --dim: calc( 80vh /12 );
         --margin: 10vh;
     }
 }
 
 
 html {
-    margin: 0;
-    padding: 0;
-
     text-align: center;
-    background-color: darkgray;
 }
 
+
+.col-1 {
+    display: inline-block;
+}
+
+section.container-fluid {
+    border: 2px solid darkred;
+    border-radius: 1rem;
+
+    margin: var(--dim);
+}
+
+/* styling of a playground-cell */
+
+@media( max-width: 767px )  {
+    .cell { background-image: url('/assets/images/gravier-32.png') }
+}
+@media( min-width: 768px ) and ( max-width: 1199px )  {
+    .cell { background-image: url('/assets/images/gravier-64.png') }
+}
+@media( min-width: 1200px )  {
+    .cell { background-image: url('/assets/images/gravier-128.png') }
+}
+
+.cell {
+    width: var(--dim);
+    height: var(--dim);
+
+    padding-right: 0;
+    padding-left: 0;
+}
+
+
+.error {
+    text-align: center;
+    font-style: italic;
+    color: red;
+}
