@@ -9,6 +9,15 @@ function formatErrorMsg( string $msg ) : string {
 }
 
 
+function redirect( $url ) {
+    ob_start();
+    header('Location: ' . $url);
+    ob_end_flush();
+    die();
+}
+
+
+
 function generateLevel() : array {
     global $itemsToPlace;
 
@@ -38,7 +47,7 @@ function generateLevel() : array {
 }
 
 
-function generatePlayground( array $level, array $players ) : string {
+function generatePlayground( array $level, array $players, $playId ) : string {
     global $tilesCSS;
     $result = '';
 
@@ -64,23 +73,29 @@ function generatePlayground( array $level, array $players ) : string {
 
             $style = $fillTable[$v][0];
             $content = $fillTable[$v][1];
+            $imgClass = null;
 
             if ( isset($content) )
                 $content = 'assets/images/' . $content . '.png';
 
-            $p = isPlayerInCell( $players, array( $y,$x ) );
-            if ( null != $p)
-               $content = $p['images']->xs;
+            $numPlayer = isPlayerInCell( $players, array( $y,$x ) );
+            if ( null !== $numPlayer )
+            {
+                 $content = $players[$numPlayer]['images']->xs;
+
+                if ( $numPlayer == $playId )
+                    $imgClass = ' playNow';
+            }
 
             if ( isset($content) )
-                $content = '<img class="itemized" src="' . $content . '" alt="">';
+                $content = '<img class="itemized' . $imgClass
+                                 . '" src="' . $content . '" alt="">';
 
             $result .= '<div class="col-1 ' . $style . '">' . $content . "</div>\n";
         }
 
         $result .= "</div>    <!-- .row -->\n";
     }
-
     return $result;
 }
 
@@ -107,12 +122,20 @@ function positionPlayers( array &$players, int $nbPlayers ) {
 }
 
 
+/**
+* Returns the id of the player in $players when this one is
+*  in the corresponding cell, or null
+* @return int|null
+*/
 function isPlayerInCell( array $players, array $pos ) {
-    foreach ($players as $p) {
-        $posP = $p['pos'];
+    $l = count($players);
+
+    for ( $i = 0; $i < $l; ++$i )
+    {
+        $posP = $players[$i]['pos'];
 
         if ( ( $posP[0] == $pos[0] ) && ( $posP[1] == $pos[1] ) )
-            return $p;
+            return $i;
     }
 
     return null;

@@ -69,6 +69,15 @@ img.itemized {
     height: var(--item);
 }
 
+img.playNow {
+    border: red;
+    border-radius: 3px;
+
+    box-shadow: 3px 3px 3px red, -3px 3px 3px red,
+                -3px -3px 3px red, 3px -3px 3px red;
+/*TODO : animation; */
+}
+
 form h1 {
     font-color: darkred;
     font-size: 2rem;

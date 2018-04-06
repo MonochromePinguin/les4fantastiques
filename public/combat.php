@@ -40,7 +40,7 @@ if ( 0 != count( $_GET ) )
         {
             $api = new heroClient();
 
-//TODO : $nbplayers should vary !
+//TODO : $nbplayers could vary on day !
             $nbPlayers = 2;
 
             $playersId[0] = $_POST['player1Id'];
@@ -82,6 +82,8 @@ if ( 0 != count( $_GET ) )
     $players = &$_SESSION['players'];
     $playId = &$_SESSION['playingId'];
     $nbTurns = &$_SESSION['nbTurns'];
+    $level = &$_SESSION['level'];
+
 
     #a movement has occured. Let's update.
     if ( isset( $_POST['actionOne'] ) ) {
@@ -93,24 +95,24 @@ if ( 0 != count( $_GET ) )
 
         switch ( $_POST['actionOne'] ) {
             case 'up':
-                $newPos[1] = max( $pos[1] -1, 0 );
+                $newPos[0] = max( $pos[0] -1, 0 );
                 break;
             case 'right':
-                $newPos[0] = min( $pos[0] +1, PLAYGROUNDDIM );
+                $newPos[1] = min( $pos[1] +1, PLAYGROUNDDIM -1);
                 break;
             case 'down':
+                $newPos[0] = min( $pos[0] +1, PLAYGROUNDDIM -1);
                 break;
-                $newPos[1] = min( $pos[1] +1, PLAYGROUNDDIM );
             case 'left':
+                $newPos[1] = max( $pos[1] -1, 0 );
                 break;
-                $newPos[0] = max( $pos[0] -1, 0 );
 
             case 'pass':
         }
 
         if ( null == isPlayerinCell( $players, $newPos ) )
         {
-            switch ( $level[$newPos[1]][$newPos[0]] ) {
+            switch ( $level[ $newPos[1] ][ $newPos[0] ] ) {
                 case 0:
                     $canMove = true;
                     break;
@@ -137,7 +139,9 @@ if ( 0 != count( $_GET ) )
         #final movement test
         if ( ( WINCELLPOS == $pos[0] ) && ( WINCELLPOS == $pos[1] ) )
         {
-            $_SESSION['winnerId'] = $playId;
+            $winnerId = $playId;
+#TODO : make it smarter
+            redirect( 'end.php');
         }
     }
 
@@ -148,7 +152,7 @@ if ( 0 != count( $_GET ) )
 
     #redraw the grid
     $_SESSION['playground'] =
-    $playground = generatePlayground( $_SESSION['level'], $players );
+    $playground = generatePlayground( $_SESSION['level'], $players, $playId );
 }
 
 ?>
@@ -257,6 +261,19 @@ if ( 0 != count( $_GET ) )
                 </fieldset>
             <form>
         </section>
+
+    <?php
+        if ( isset( $_SESSION['winnerId'] ) ) {
+    ?>
+        <section class="">
+            <p>
+                <?= $players[ $winnerId ]['name'] ?> a gagné&nbsp;!
+            </p>
+        </section>
+
+    <?php
+        }
+    ?>
 
 <?php
     }
