@@ -22,8 +22,7 @@ if ( 0 != count( $_GET ) )
 
     $requiredPlayers = [ 'player1Id', 'player2Id' ];
 
-    if ( empty($_SESSION['player1Id'])
-         || empty($_SESSION['player2Id'])
+    if ( isset( $_POST['player1Id'] ) || isset( $_POST['player2Id'] )
          || empty($_SESSION['level'])
        )
     {
@@ -32,6 +31,7 @@ if ( 0 != count( $_GET ) )
             if ( empty( $_POST[$r] ) )
             {
                 $errorFlag = true;
+                $errBlock = formatErrorMsg( 'Désolé ! Requête mal formée !');
                 break;
             }
         }
@@ -40,25 +40,18 @@ if ( 0 != count( $_GET ) )
         {
             $api = new heroClient();
 
-            $playersId[0] = $_POST['player1Id'];
-            $playerId[1] = $_POST['player2Id'];
+//TODO : $nbplayers should vary !
+            $nbPlayers = 2;
 
-            #position the players at random corners
-            $possiblePositions = [
-                [0, 0],
-                [0, PLAYGROUNDDIM],
-                [PLAYGROUNDDIM, PLAYGROUNDDIM],
-                [PLAYGROUNDDIM, 0]
-            ];
-            $availablePositions = [ true, true, true, true ];
-            $pPos = count( $possiblePositions );
+            $playersId[0] = $_POST['player1Id'];
+            $playersId[1] = $_POST['player2Id'];
 
             #store characters's characteristics into a session variable
-            foreach ($playerId as $p)
+            for ($i = 0; $i < $nbPlayers; ++$i)
             {
-                $resp = $api->get('id/' . $p . '.json');
+                $resp = $api->get('id/' . $playersId[$i] . '.json');
 
-                $players[$p] = [
+                $players[$i] = [
                     'name' => $resp->name,
                     'life' => MAXLIFE,
                     'strength' => $resp->powerstats->strength,
@@ -66,35 +59,96 @@ if ( 0 != count( $_GET ) )
                     'images' =>  $resp->images
                 ];
                 $resp = null;
-
-                #settle the player in a random corner
-                do {
-                    $n = rand(0, $pPos-1);
-                } while ( $availablePositions[$n] = false );
-
-                $players[$p]['pos'] = $possiblePositions[$n];
             }
 
-            $_SESSION['players'] = $players;
+            positionPlayers($players, $nbPlayers);
 
+            $_SESSION['nbPlayers'] = &$nbPlayers;
+            $_SESSION['players'] = &$players;
+
+            #create the $nbTurns and $playingId counters
+            $_SESSION['nbTurns'] = 0;
+            $_SESSION['playingId'] = 0;
 
             #once we have players, we generate the level
             if ( empty( $_SESSION['level'] ) )
-                $_SESSION['level'] = generateLevel(PLAYGROUNDDIM);
-
+                $_SESSION['level'] = generateLevel();
         }
 
     }
-var_dump($_SESSION['players']);
 
-    # regenerate the playground each time needed
-    if ( ! $errorFlag )
-    {
-        if ( empty( $_SESSION['playground'] ) )
-            $playground = generatePlayground( $_SESSION['level'] );
-    } else
-        $errBlock = formatErrorMsg( 'Désolé ! Requête mal formée !');
+    #create some shortcuts
+    $nbPlayers = &$_SESSION['nbPlayers'];
+    $players = &$_SESSION['players'];
+    $playId = &$_SESSION['playingId'];
+    $nbTurns = &$_SESSION['nbTurns'];
 
+    #a movement has occured. Let's update.
+    if ( isset( $_POST['actionOne'] ) ) {
+
+        $pos = &$players[$playId]['pos'];
+        $newPos = $pos;
+
+        $canMove = false;
+
+        switch ( $_POST['actionOne'] ) {
+            case 'up':
+                $newPos[1] = max( $pos[1] -1, 0 );
+                break;
+            case 'right':
+                $newPos[0] = min( $pos[0] +1, PLAYGROUNDDIM );
+                break;
+            case 'down':
+                break;
+                $newPos[1] = min( $pos[1] +1, PLAYGROUNDDIM );
+            case 'left':
+                break;
+                $newPos[0] = max( $pos[0] -1, 0 );
+
+            case 'pass':
+        }
+
+        if ( null == isPlayerinCell( $players, $newPos ) )
+        {
+            switch ( $level[$newPos[1]][$newPos[0]] ) {
+                case 0:
+                    $canMove = true;
+                    break;
+                case I_TRAP:
+                    $canMove = true;
+                    break;
+                case I_ROCK:
+                    //cannot move into
+                    break;
+                case I_HEART:
+                    $canMove = true;
+                    break;
+                case I_BOOSTER:
+                    $canMove = true;
+            }
+        }
+
+        if ($canMove)
+        {
+            $pos[0] = $newPos[0];
+            $pos[1] = $newPos[1];
+        }
+
+        #final movement test
+        if ( ( WINCELLPOS == $pos[0] ) && ( WINCELLPOS == $pos[1] ) )
+        {
+            $_SESSION['winnerId'] = $playId;
+        }
+    }
+
+    #update counters
+    ++$nbTurns;
+    if ( ++$playId >= $nbPlayers )
+        $playId = 0;
+
+    #redraw the grid
+    $_SESSION['playground'] =
+    $playground = generatePlayground( $_SESSION['level'], $players );
 }
 
 ?>
@@ -146,6 +200,11 @@ var_dump($_SESSION['players']);
         </section>
 
         <section class="controls container-fluid">
+            <h1><?= $players[$playId]['name'] . ' joue' ?></h1>
+            <h2><?= 'tour n°' . $nbTurns ?></h2>
+            <p> debug : pos <?= $players[$playId]['pos'][0] ?>,
+                        <?= $players[$playId]['pos'][1] ?>
+            </p>
             <form method="POST" action="#">
                 <fieldset name="movements">
                     <legend>mouvements</legend>
@@ -178,7 +237,7 @@ var_dump($_SESSION['players']);
                     <label>
                         Passer le tour
                         <span class="glyphicon glyphicon-remove"></span>
-                        <input type="radio" name="actionOne" value="noAction">
+                        <input type="radio" name="actionOne" value="pass">
                     </label>
 
 <!--                     <label>
@@ -198,6 +257,7 @@ var_dump($_SESSION['players']);
                 </fieldset>
             <form>
         </section>
+
 <?php
     }
 ?>

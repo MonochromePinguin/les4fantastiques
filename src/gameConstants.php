@@ -11,21 +11,17 @@ DEFINE( 'I_ROCK', 3 );  # obstacle: a rock
 DEFINE( 'I_HEART', 4 ); # a heart : some life to absorb
 DEFINE( 'I_BOOSTER', 5 ); #boost the speed for several turns
 
+DEFINE( 'B_TARGET', 6);
 
-#tile images
-#
-$tiles = [
-    I_BOMB => 'bomb-32.png',
-    I_ROCK => 'rock-32.png',
-    I_HEART => 'heart-32.png',
-    I_BOOSTER => 'booster-32.png'
-];
+
+DEFINE('WINCELLPOS',  PLAYGROUNDDIM/2 );
 
 
 $itemsToPlace = [
     I_TRAP => 10,
     I_BOMB => 5,
     I_ROCK => 20,
+    I_HEART => 8,
     I_BOOSTER => 3
 ];
 

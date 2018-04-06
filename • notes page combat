@@ -1,0 +1,18 @@
+• notes sur la page public/combat.php :
+
+_ si appelée via une chaîne de requête en GET, elle affiche juste un message d'erreur.
+_ si la variable de session player1Id ou player2Id est vide :
+    _ si elles ne sont pas toutes 2 présentes dans la requête POST :
+        affiche juste un message d'erreur.
+    _ sinon :
+        _ charge les playersId dans un tableau (pouvant accueillir un nb indéterminé de joueuers),
+        _récupère les données des joueurs via l'API superheros,
+        _ les stocke avec des infos spécifiques au jeu dans des tbl eux-mêmes stockés ds une variable de session
+        _ génère un niveau.
+_ si une infos nommée actionOne est fournie par la requête,
+ les personnages dans $_SESSION['players'] sont déplacés, et
+ les variable de session $numturn et $playingId sont mises à jour
+
+
+$playingId : le joueur ayant accès aux contrôles de mvt ds la page affichée
+$nbTurns : numéro de tour actuel (1/joueur ...)
