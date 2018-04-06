@@ -1,0 +1,86 @@
+
+@media ( min-aspect-ratio: 1/1 ) {
+    :root { --dim: calc( 80vh /12 );
+            --margin: 10vh;
+    }
+}
+
+@media ( max-aspect-ratio: 1/1 ) {
+    :root {
+        --dim: calc( 80vh /12 );
+        --margin: 10vh;
+    }
+}
+
+:root {
+    --item: calc( var(--dim) * 0.8 );
+    --margeItem: calc( var(--dim) * 0.1);
+}
+
+
+html {
+    text-align: center;
+}
+
+
+.col-1 {
+    display: inline-block;
+}
+
+section.container-fluid {
+    border: 2px solid darkred;
+    border-radius: 1rem;
+
+    margin: var(--dim);
+}
+
+/* styling of a playground-cell */
+
+@media( max-width: 767px )  {
+    .cell-grav { background-image: url('/assets/images/gravier-32.png') }
+    .cell-stone { background-image: url('/assets/images/stones-32.png') }
+}
+@media( min-width: 768px ) and ( max-width: 1199px )  {
+    .cell-grav { background-image: url('/assets/images/gravier-64.png') }
+    .cell-stone { background-image: url('/assets/images/stones-64.png') }
+}
+@media( min-width: 1200px )  {
+    .cell-grav { background-image: url('/assets/images/gravier-128.png') }
+    .cell-stone { background-image: url('/assets/images/stones-128.png') }
+}
+
+.cell-grav,
+.cell-stone {
+    position: relative;
+
+    width: var(--dim);
+    height: var(--dim);
+
+    padding-right: 0;
+    padding-left: 0;
+}
+
+img.itemized {
+    position: absolute;
+    top: var(--margeItem);
+    left: var(--margeItem);
+
+    width: var(--item);
+    height: var(--item);
+}
+
+form h1 {
+    font-color: darkred;
+    font-size: 2rem;
+}
+form h2 {
+    font-color: darkblue;
+    font-size: 1.5rem;
+}
+
+
+.error {
+    text-align: center;
+    font-style: italic;
+    color: red;
+}
