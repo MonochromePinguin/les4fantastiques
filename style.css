@@ -1,0 +1,64 @@
+body
+{
+	background: #0F55F4;
+}
+
+.image
+
+{border: 3px solid white;
+	padding: 3px;
+	opacity: 0.7;
+	width: 90%;
+}
+
+img.image:hover
+{
+	opacity: 1;
+}
+
+.thumbnail
+{
+	width:80%;
+}
+
+h3
+{
+	font-size: 1.4rem;
+	font-family: 'IBM Plex Sans Condensed', sans-serif;
+	color: white;
+}
+
+h1
+{
+	font-family: 'IBM Plex Sans Condensed', sans-serif;
+	font-size: 5rem;
+	padding-bottom: 20px;
+	color: white;
+}
+
+h2
+{
+	font-family: 'IBM Plex Sans Condensed', sans-serif;
+	font-size: 3rem;
+	padding-top: 20px;
+	color: white;
+}
+
+.pacman
+{
+	width:4%;
+	color: white;
+}
+
+.joystick
+{
+	width:6%;
+	color: white;
+}
+
+button
+{
+	width:20%;
+}
+
+
