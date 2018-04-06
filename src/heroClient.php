@@ -1,7 +1,7 @@
 <?php
 
-Use \GuzzleHttp\Client as Client;
-use \GuzzleHttp\EntityBody as Body;
+use GuzzleHttp\Client as Client;
+use GuzzleHttp\EntityBody as Body;
 
 class heroClient
 {
