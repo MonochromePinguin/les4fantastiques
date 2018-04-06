@@ -180,7 +180,7 @@ if ( 0 != count( $_GET ) )
   </head>
   <header>
     <div class="container ">
-      <a href="http://localhost:8000/end.php"><img src="https://vignette.wikia.nocookie.net/nickiminaj/images/6/64/Vs.png/revision/latest?cb=20130504020423" width="10%" height="10%" class="vs"></a>
+      <a href="http://localhost:8000/end.php"><img src="https://vignette.wikia.nocookie.net/nickiminaj/images/6/64/Vs.png/revision/latest?cb=20130504020423" width="70%" height="70%" class="vs"></a>
     </div>
 
     <div class="player1vsplayer2">
