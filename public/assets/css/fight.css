@@ -1,0 +1,56 @@
+body{
+  background-color: #0F55F4;
+}
+h4{
+  text-align: center;
+  color: white;
+}
+.progressPlayer1{
+  float: left;
+  margin-left: 5px;
+  margin-top: 5px;
+  width: auto;
+  height: auto;
+}
+.progressPlayer2{
+  float: right;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+.playerimg1{
+  border-radius: 20px;
+}
+.playerimg2{
+  border-radius: 20px;
+}
+.container{
+ display: flex;
+ justify-content: center;
+ line-height: 0px;
+ width: 100%;
+ vertical-align: baseline;
+ position:absolute;
+ top:50px;
+
+}
+.progress{
+  margin-top: 5px;
+}
+.progress-bar{
+  color: red;
+  background-color: orange;
+}
+.commandes{
+  line-height: 0px;
+  vertical-align: baseline;
+  width: 100%;
+  position:absolute;
+  bottom:0px;
+}
+.commande2{
+
+  float: left;
+}
+.commande1{
+  float: right;
+}
