@@ -173,15 +173,46 @@ if ( 0 != count( $_GET ) )
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous" defer></script>
 
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed:400,500,600" rel="stylesheet">
+
     <link rel="stylesheet" href="assets/css/combat.css">
 
   </head>
+  <header>
+    <div class="container ">
+      <a href="http://localhost:8000/end.php"><img src="https://vignette.wikia.nocookie.net/nickiminaj/images/6/64/Vs.png/revision/latest?cb=20130504020423" width="10%" height="10%" class="vs"></a>
+    </div>
 
+    <div class="player1vsplayer2">
+
+      <section class="progressPlayer1">
+        <img src="https://raw.githubusercontent.com/akabab/superhero-api/0.2.0/api/images/sm/1-a-bomb.jpg"   class="playerimg1">
+        <h4> Player 1 </h4>
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+            60PV
+          </div>
+        </div>
+      </section>
+
+      <section class="progressPlayer2">
+        <img src="https://raw.githubusercontent.com/akabab/superhero-api/0.2.0/api/images/sm/1-a-bomb.jpg"  class="playerimg2">
+        <h4> Player 2 </h4>
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+            60PV
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </header>
   <body>
     <header class="container-fluid">
         <div class="row">
             <img src="" alt="">
-            <p> Vs </p>
+            <p>  </p>
             <img src="" alt="">
         </div>
     </header>
