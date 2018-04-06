@@ -214,14 +214,14 @@ if ( 0 != count( $_GET ) )
                     <legend>mouvements</legend>
 
                     <label>
+                        gauche
+                        <span class="glyphicon glyphicon-arrow-left"></span>
+                        <input type="radio" name="actionOne" value="left">
+                    </label>
+                    <label>
                         haut
                         <span class="glyphicon glyphicon-arrow-up"></span>
                         <input type="radio" name="actionOne" value="up">
-                    </label>
-                    <label>
-                        droite
-                        <span class="glyphicon glyphicon-arrow-right"></span>
-                        <input type="radio" name="actionOne" value="right">
                     </label>
                     <label>
                         bas
@@ -229,9 +229,9 @@ if ( 0 != count( $_GET ) )
                         <input type="radio" name="actionOne" value="down">
                     </label>
                     <label>
-                        gauche
-                        <span class="glyphicon glyphicon-arrow-left"></span>
-                        <input type="radio" name="actionOne" value="left">
+                        droite
+                        <span class="glyphicon glyphicon-arrow-right"></span>
+                        <input type="radio" name="actionOne" value="right">
                     </label>
                 </fieldset>
 
